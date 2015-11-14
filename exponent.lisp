@@ -1,11 +1,11 @@
-(defun int_exponent (xn sn x n maxn)
+(setq exponent_precision 10)
+
+(defun int_exponent (xn sn x n)
 	(
-		if (= n maxn) 
+		if (= n exponent_precision) 
 			(/ xn sn)
-			(+ (/ xn sn) (int_exponent (* xn x) (* sn n) x (+ n 1) maxn))
+			(+ (/ xn sn) (int_exponent (* xn x) (* sn n) x (+ n 1)))
 	)
 )
 
-(defun exponent (x)
-	(float (int_exponent x 1 x 1 10))
-)
+(setq exponent '(float (int_exponent x 1 x 1)))
