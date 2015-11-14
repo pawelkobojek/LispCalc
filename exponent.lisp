@@ -3,9 +3,14 @@
 (defun int_exponent (xn sn x n)
 	(
 		if (= n exponent_precision) 
-			(/ xn sn)
-			(+ (/ xn sn) (int_exponent (* xn x) (* sn n) x (+ n 1)))
+			`(/ ,xn ,sn)
+			(
+				if (= n 0)
+					`(+ 1 ,(int_exponent `(* ,xn ,x) (* sn (+ n 1)) x (+ n 1)))
+					`(+ (/ ,xn, sn) ,(int_exponent `(* ,xn ,x) (* sn (+ n 1)) x (+ n 1)))
+			)
 	)
 )
 
-(setq exponent '(float (int_exponent x 1 x 1)))
+(defun exponent (x)
+	`(float ,(int_exponent x 1 x 0)))
