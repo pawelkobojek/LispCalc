@@ -5,9 +5,13 @@
     (`(* ,x ,(power x (- y 1))))))
 
 (defmacro power-macro (x y)
-  `(if (= ,y 0)
-    1
-    `(* ,,x ,(power-macro ,x ,(- y 1)))))
+  `(cond
+    ((= ,y 0) 1)
+    ((< ,y 0) `(* (/ 1 ,,x) ,(power-macro ,x ,(+ y 1))))
+    (`(* ,,x ,(power-macro ,x ,(- y 1))))))
+  ;`(if (= ,y 0)
+  ;  1
+  ;  `(* ,,x ,(power-macro ,x ,(- y 1)))))
 
 
 ;(setq expr (power `x 5))
