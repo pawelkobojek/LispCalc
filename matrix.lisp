@@ -52,27 +52,35 @@
 	)
 )
 
-(defun int-extract-matrix-elem (m)
+(defun car-matrix (m)
 	(
-		if (not (= (length (car m)) 1))
-			(error "Matrix has row with more than one element")
-			(car m)
+		if (= (length m) 1)
+			(list (car (car m)))
+			(cons (car (car m)) (car-matrix (rest m)))
 	)
 )
 
-(defun matrix-as-vector (m)
+(defun car-matrix-macro (m)
 	(
 		if (= (length m) 1)
-			(int-extract-matrix-elem m)
-			(cons (car (int-extract-matrix-elem m)) (matrix-as-vector (rest m)))
+			(list (car (car m)))
+			(cons (car (car m)) (car-matrix-macro (rest m)))
 	)
 )
 
-(defun matrix-as-vector-macro (m)
+(defun rest-matrix (m)
 	(
 		if (= (length m) 1)
-			(int-extract-matrix-elem m)
-			(cons (car (int-extract-matrix-elem m)) (matrix-as-vector-macro (rest m)))
+			(list (rest (car m)))
+			(cons (rest (car m)) (rest-matrix (rest m)))
+	)
+)
+
+(defun rest-matrix-macro (m)
+	(
+		if (= (length m) 1)
+			(list (rest (car m)))
+			(cons (rest (car m)) (rest-matrix-macro (rest m)))
 	)
 )
 
@@ -81,5 +89,21 @@
 		if (= (length m) 1)
 		(list (list (dot-vector (car m) v)))
 		(cons (list (dot-vector (car m) v)) (mul-matrix-by-vector (rest m) v))
+	)
+)
+
+(defun concat-matrix (m1 m2)
+	(
+		if (= (length m1) 1)
+			(list (append (car m1) (car m2)))
+			(cons (append (car m1) (car m2)) (concat-matrix (rest m1) (rest m2)))
+	)
+)
+
+(defun mul-matrix (m1 m2)
+	(
+		if (= (length (car m2)) 1)
+			(mul-matrix-by-vector m1 (car-matrix m2))
+			(concat-matrix (mul-matrix-by-vector m1 (car-matrix m2)) (mul-matrix m1 (rest-matrix m2)))
 	)
 )
