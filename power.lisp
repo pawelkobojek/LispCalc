@@ -1,7 +1,8 @@
 (defun power (x y)
-  (if (= y 0)
-    1
-    `(* ,x ,(power x (- y 1)))))
+  (cond
+    ((= y 0) 1)
+    ((< y 0) `(* (/ 1 ,x) ,(power x (+ y 1))))
+    (`(* ,x ,(power x (- y 1))))))
 
 (defmacro power-macro (x y)
   `(if (= ,y 0)
